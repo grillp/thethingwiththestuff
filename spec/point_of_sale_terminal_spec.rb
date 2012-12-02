@@ -3,9 +3,13 @@ require 'spec_helper'
 
 describe PointOfSaleTerminal do
 	subject {PointOfSaleTerminal.new(pricing_engine, cart)}
-	
 	let (:pricing_engine) { stub(:pricing__engine)}
 	let (:cart) { stub(:cart)}
+	let (:has_price_for) {true}
+	before :each do
+		pricing_engine.stub!(:has_price_for?).with(anything()).and_return has_price_for
+	end
+
 	describe 'set_pricing' do
 		it 'should add each price to the procing engine' do
 			price_one = {name: 0};
@@ -13,15 +17,28 @@ describe PointOfSaleTerminal do
 			pricing = [price_one, price_two]
 			pricing_engine.should_receive(:add_price_point).once.with(price_one)
 			pricing_engine.should_receive(:add_price_point).once.with(price_two)
-			 
+
 			subject.set_pricing(pricing)
 		end
 	end
+
 	describe 'scan' do
 		it 'should add the item name to the cart' do
-			item = stub(:an_item)
-			cart.should_receive('add_item').with(item)
-			subject.scan(item)
+			cart.should_receive('add_item').with(:item_name)
+			subject.scan(:item_name)
+		end
+
+		it 'should ask pricing_engine if it has a price for the item' do
+			cart.stub(:add_item)
+			pricing_engine.should_receive('has_price_for?').with(:item_name).and_return true
+			subject.scan(:item_name)
+		end
+
+		context 'for an item that does not exist' do
+			let (:has_price_for) {false}
+			it "should raise a runtime error" do
+				lambda {subject.scan :does_not_exist}.should raise_error(RuntimeError)
+			end
 		end
 	end
 
