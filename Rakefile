@@ -1,5 +1,3 @@
-task :default => [:test]
-
-task :test do
-   puts "Test!"
+task :default do
+  sh 'bundle exec rspec spec'
 end
