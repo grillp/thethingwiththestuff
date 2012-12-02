@@ -2,9 +2,11 @@ source :rubygems
 gem "rake"
 
 group :test do
-  gem "rspec"
+    gem "rspec"
 end
 
 group :development do
-  gem "ZenTest"
+	gem 'rb-fsevent'
+ 	gem 'guard-rspec'
+	gem 'guard-livereload'
 end
