@@ -26,7 +26,7 @@ describe PointOfSaleTerminal do
 	end
 
 	describe 'total' do
-		it 'should get all teh items from the cart' do
+		it 'should get all the items from the cart' do
 			cart.should_receive(:items).and_return([])
 			subject.total
 		end
