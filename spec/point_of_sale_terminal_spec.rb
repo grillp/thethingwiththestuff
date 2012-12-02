@@ -1,7 +1,9 @@
+
 require 'spec_helper'
 
 describe PointOfSaleTerminal do
 	subject {PointOfSaleTerminal.new(pricing_engine, cart)}
+	
 	let (:pricing_engine) { stub(:pricing__engine)}
 	let (:cart) { stub(:cart)}
 	describe 'set_pricing' do
@@ -30,14 +32,14 @@ describe PointOfSaleTerminal do
 		end
 
 		it 'should get the price for each item from the pricing engine' do
-			cart.stub!(:items).and_return([:one, :two])
+			cart.stub!(:items).and_return([{name: :one}, {name: :two}])
 			pricing_engine.should_receive(:price_for_item).once.with(:one).and_return 0
 			pricing_engine.should_receive(:price_for_item).once.with(:two).and_return 0
 			subject.total
 		end
 
 		it "should return the sum of all the prices returned from the pricing engine" do
-			cart.stub!(:items).and_return([:one, :two])
+			cart.stub!(:items).and_return([{name: :one}, {name: :two}])
 			pricing_engine.stub!(:price_for_item).with(:one).and_return 12.0
 			pricing_engine.stub!(:price_for_item).with(:two).and_return 20.0
 

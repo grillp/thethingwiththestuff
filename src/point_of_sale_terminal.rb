@@ -8,7 +8,7 @@ class PointOfSaleTerminal
 	end
 
 	def set_pricing(pricing) 
-		pricing.each { |price| @pricing_engine.add_price_point price }
+		pricing.each { |price_point| @pricing_engine.add_price_point price_point }
 	end
 
 	def scan(item) 
@@ -16,7 +16,7 @@ class PointOfSaleTerminal
 	end
 
 	def total
-		@cart.items.map{|item| @pricing_engine.price_for_item(item)}.reduce{|total, price| total += price}
+		@cart.items.map{|item| @pricing_engine.price_for_item(item[:name])}.reduce{|total, price| total += price}
 	end
 	
 end
