@@ -32,16 +32,16 @@ describe PointOfSaleTerminal do
 		end
 
 		it 'should get the price for each item from the pricing engine' do
-			cart.stub!(:items).and_return([{name: :one}, {name: :two}])
-			pricing_engine.should_receive(:price_for_item).once.with(:one).and_return 0
-			pricing_engine.should_receive(:price_for_item).once.with(:two).and_return 0
+			cart.stub!(:items).and_return([{name: :one, quantity: :quant_1}, {name: :two, quantity: :quant_2}])
+			pricing_engine.should_receive(:price_for_item).once.with(:one, :quant_1).and_return 0
+			pricing_engine.should_receive(:price_for_item).once.with(:two, :quant_2).and_return 0
 			subject.total
 		end
 
 		it "should return the sum of all the prices returned from the pricing engine" do
 			cart.stub!(:items).and_return([{name: :one}, {name: :two}])
-			pricing_engine.stub!(:price_for_item).with(:one).and_return 12.0
-			pricing_engine.stub!(:price_for_item).with(:two).and_return 20.0
+			pricing_engine.stub!(:price_for_item).with(:one, anything()).and_return 12.0
+			pricing_engine.stub!(:price_for_item).with(:two, anything()).and_return 20.0
 
 			subject.total.should == 32
 		end

@@ -16,7 +16,7 @@ class PointOfSaleTerminal
 	end
 
 	def total
-		@cart.items.map{|item| @pricing_engine.price_for_item(item[:name])}.reduce{|total, price| total += price}
+		@cart.items.map{|item| @pricing_engine.price_for_item(item[:name], item[:quantity])}.reduce{|total, price| total += price}
 	end
 	
 end
