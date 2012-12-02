@@ -9,7 +9,12 @@ describe PricingEngine do
 			cart.should_receive(:items).and_return []
 			subject.total_for_cart cart
 		end
-
+	
 	end
+
+	describe :add_price_point do
+		it 'should create a new price point per '	  
+	end
+
 
 end
