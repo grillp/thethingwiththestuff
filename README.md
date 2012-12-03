@@ -1,5 +1,7 @@
-thethingwiththestuff[![Build Status](https://secure.travis-ci.org/grillp/thethingwiththestuff.png?branch=master)](https://travis-ci.org/grillp/thethingwiththestuff)
+thethingwiththestuff
 ====================
+
+[![Build Status](https://secure.travis-ci.org/grillp/thethingwiththestuff.png?branch=master)](https://travis-ci.org/grillp/thethingwiththestuff)
 
 The Thing with the Stuff
 
