@@ -1,4 +1,4 @@
-#!env ruby
+#!/usr/bin/env ruby
 
 require_relative 'src/point_of_sale_terminal'
 

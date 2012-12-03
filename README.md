@@ -55,7 +55,7 @@ To get the total price of all scanned items, you call the `total` method, which 
 Environment
 -----------
 * git repo @ github --> <https://github.com/grillp/thethingwiththestuff>
-* rbenv to setup my ruby environment (1.9.3)
+* rbenv to setup my ruby environment (1.9.x)
 * bundler to set dependencies
 * travis CI for.. well.. CI! --> <https://travis-ci.org/grillp/thethingwiththestuff>
 * the `guard` gem to run rpec automagically (awesome!)
@@ -70,6 +70,19 @@ I Have an acceptance test as an rspec test in `rspec/acceptance/point_of_sale_te
 
 I did not do a BDD style acceptance test (e.g Cucumber).. seemed a little heavy handed for the problem
 
+Running the examples
+--------------------
+
+The examples specified in the problem are coded up in the `runme.rb`
+
+These can be run using:
+
+* `ruby runme.rb`
+* `./runme.rb`
+* `bundle exec rake run`
+
+The examples are also run as part of the travis-ci build here: <https://travis-ci.org/grillp/thethingwiththestuff>
+
 Design Notes
 ------------
 
@@ -79,6 +92,8 @@ Design Notes
 
 * Scanning an 'item' that has no price point associated with it will throw a `RuntimeError`
 
-* The algorithm for determining the largest price point quantity that will fit with the remaining quantity (`PricePointHelper.find_highest_not_greater_than_target`) is not terribly efficient (reducing over all values). However due to the unsorted nature of the `hash.keys`, it was still more efficient than sorting the keys each time and then scanning the list to see which value is highest, but not more than the target value. And for the small number of '*n*' it did not make any real difference
+* Dependency Injection into PointOfSaleTerminal of PricingEngine and Cart is done using default initialized parameters. They are overridden with mocks in PointOfSaleTerminal's spec..  not sure if that is better than hardcoding them in the initialize and having to stubb PricingEngine.new and Cart.new to return mocks.. makes tests somewhat cleaner though.
+
+* The algorithm for determining the largest price point quantity that will fit with the remaining quantity (`PricePointHelper.find_highest_not_greater_than_target`) is not terribly efficient ('reduce' over all quantities). However due to the unsorted nature of the `hash.keys` whare the quantities are stored, it was more efficient than sorting the keys each time and then scanning the list to see which value is highest, but not more than the target value. And for the small number of '*n*' it did not make any real difference
 
 * I put the `PricePointHelper.find_highest_not_greater_than_target` as a Module so that I could test it in isolation.
