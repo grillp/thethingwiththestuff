@@ -22,9 +22,9 @@ When all items are scanned, a total cost for all the scanned items can be retrie
 Details
 -------
 
-The main component of the solution is the PointOfSaleTerminal class.
+The main component of the solution is the `PointOfSaleTerminal` class.
 
-To initialise the prices of the PointOfSaleTerminal, you should call the `set_pricing` method.
+To initialise the `PointOfSaleTerminal` prices, you call the `set_pricing` method.
 
 `set_pricing` takes a single parameter which descibes the prices (or price points) for each item. A price point consists of a name, price and quantity.
 
@@ -40,36 +40,43 @@ terminal.set_pricing([
                      ])
 ```
 
-To scan purchased items into the termina, you use the `scan` method. this method is called with the name of the item you wish to scan.
+To scan purchased items into the terminal, use the `scan` method. This method is called with the name of the item you wish to scan.
 
-e.g. to scan an 'ITEM1', you would need to call:
+e.g. to scan an 'ITEM1', you would call:
 ```
    terminal.scan('ITEM1')
 ```
-If you need to scan multiple quantities of an item, you would `scan` each item individually.
+If you wish to scan multiple quantities of an item, you would `scan` each item individually... just like at the supermarket!
 
-To get the total price of all scanned items, you can call the `total` method, which will calculate the price of all the scanned items.
+To get the total price of all scanned items, you call the `total` method, which will calculate the price of all the scanned items, taking into account the price points added to the terminal.
 
 Environment
 -----------
-* git repo @ github <https://github.com/grillp/thethingwiththestuff>
+* git repo @ github --> <https://github.com/grillp/thethingwiththestuff>
 * rbenv to setup my ruby environment (1.9.3)
 * bundler to set dependencies
-* travis CI for.. well CI! [https://travis-ci.org/grillp/thethingwiththestuff]
+* travis CI for.. well.. CI! --> <https://travis-ci.org/grillp/thethingwiththestuff>
+* the `guard` gem to run rpec automagically (awesome!)
+* rake for the build
 
 Testing
 -------
 
-*
+Everything developed TDD Style
+
+I Have an acceptance test as an rspec test in `rspec/acceptance/point_of_sale_terminal_acceptance_spec.rb`
+
+I did not do a BDD style acceptance test (e.g Cucumber).. seemed a little heavy handed for the problem
 
 Design Notes
 ------------
 
-* The format of the data passed to set_pricing is need to be correct. I do check for incorrectly specified hash keys in the price point hashes, and will throw a  `RuntimeError` if a required key is missing
+* The format of the data passed to set_pricing needs to be correct. I do check for incorrectly specified or missing hash keys in the price point hashes, and will throw a  `RuntimeError` if a required key is missing
+
+* I don't check the types of the attributes in the price points. If you don;t use numeric values for price and quantity, It will go boom!
 
 * Scanning an 'item' that has no price point associated with it will throw a `RuntimeError`
 
-* The algorithm for determining the largest price point quantity that will fit with the remaining quantity (`PricePointHelper.find_highest_not_greater_than_target`) is not terribly efficient '*O(n)*'. However due to the unsorted nature of the `hash.keys`, it was still more efficient than sorting the keys each time and then scanning the list to see which value is highest, but not more than the target value. And for the small number of '*n*' it did not make any real difference
+* The algorithm for determining the largest price point quantity that will fit with the remaining quantity (`PricePointHelper.find_highest_not_greater_than_target`) is not terribly efficient (reducing over all values). However due to the unsorted nature of the `hash.keys`, it was still more efficient than sorting the keys each time and then scanning the list to see which value is highest, but not more than the target value. And for the small number of '*n*' it did not make any real difference
 
 * I put the `PricePointHelper.find_highest_not_greater_than_target` as a Module so that I could test it in isolation.
-
