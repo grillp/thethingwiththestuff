@@ -73,7 +73,7 @@ Design Notes
 
 * The format of the data passed to set_pricing needs to be correct. I do check for incorrectly specified or missing hash keys in the price point hashes, and will throw a  `RuntimeError` if a required key is missing
 
-* I don't check the types of the attributes in the price points. If you don;t use numeric values for price and quantity, It will go boom!
+* I don't check the types of the attributes in the price points. If you don't use numeric values for price and quantity, It will go boom!
 
 * Scanning an 'item' that has no price point associated with it will throw a `RuntimeError`
 
