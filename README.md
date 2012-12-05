@@ -94,6 +94,6 @@ Design Notes
 
 * Dependency Injection into PointOfSaleTerminal of PricingEngine and Cart is done using default initialized parameters. They are overridden with mocks in PointOfSaleTerminal's spec..  not sure if that is better than hardcoding them in the initialize and having to stubb PricingEngine.new and Cart.new to return mocks.. makes tests somewhat cleaner though.
 
-* The algorithm for determining the largest price point quantity that will fit with the remaining quantity (`PricePointHelper.find_highest_not_greater_than_target`) is not terribly efficient ('reduce' over all quantities). However due to the unsorted nature of the `hash.keys` whare the quantities are stored, it was more efficient than sorting the keys each time and then scanning the list to see which value is highest, but not more than the target value. And for the small number of '*n*' it did not make any real difference
+* The algorithm for determining the largest price point quantity that will fit with the remaining quantity (`PricePointHelper.find_highest_not_greater_than_target`) is not terribly efficient ('reduce' over all price point quantities for a product). However due to the unsorted nature of the `hash.keys` whare the quantities are stored, it was more efficient than sorting the keys each time and then scanning the list to see which value is highest, but not more than the target value. And for the small number of '*n*' it did not make any real difference
 
 * I put the `PricePointHelper.find_highest_not_greater_than_target` as a Module so that I could test it in isolation.
