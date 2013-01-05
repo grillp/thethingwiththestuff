@@ -2,35 +2,45 @@ require_relative 'item_price_calculator'
 
 class PricingEngine
 
-	def initialize()
-		@price_calculators = {}
-	end
+	ITEM_PRICE_KEYS=[:name, :type, :prices]
 
-	def add_price_point price_point
-		raise RuntimeError.new("price_point not complete: #{price_point}") unless price_point_complete(price_point)
-		price_calculator = @price_calculators[price_point[:name]] ||= ItemPriceCalculator.new
-		price_calculator.add_price_point(price_point[:price], price_point[:quantity], price_point[:threshold])
-	end
+  def initialize price_calculator_factory = nil
+    @price_calculators = {}
+    @price_calculator_factory = price_calculator_factory
+  end
 
-	def total_for_cart cart
-		cart.items
-	end
+  def set_item_prices items_prices
 
-	def price_for_item name, quantity
-		@price_calculators[name].price_for_quantity quantity
-	end
+    items_prices.each do |item_price|
+    	validate_item_prices item_price
+      @price_calculators[item_price[:name]] = @price_calculator_factory.create_calculator_for_type item_price[:type], item_price[:prices]
+    end
+  end
 
-	def has_price_for? name
-		@price_calculators.has_key? name
-	end
+  def total_for_cart cart
+    cart.items
+  end
 
-	private
+  def price_for_item name, quantity
+    @price_calculators[name].price_for_quantity quantity
+  end
 
-	def price_point_complete price_point
-		[:name, :price, :quantity].each do |attr|
-			return false unless price_point[attr]
-		end
-		true
-	end
+  def has_price_for? name
+    @price_calculators.has_key? name
+  end
+
+  private
+
+  def price_point_complete price_point
+    [:name, :price, :quantity].each do |attr|
+      return false unless price_point[attr]
+    end
+    true
+  end
+
+
+  def validate_item_prices item_price
+  	ITEM_PRICE_KEYS.each { |expected_key| raise ParameterError.new("Invalid item price definition. Missing :#{expected_key}") unless item_price.include? expected_key }
+  end
 
 end

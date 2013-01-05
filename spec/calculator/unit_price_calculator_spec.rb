@@ -8,7 +8,7 @@ describe UnitPriceCalculator do
   describe :new do
     it "should raise and error if the price point definition is missing the :unit_price key" do
       price_point.delete :unit_price
-      expect {UnitPriceCalculator.new price_point}.to raise_error
+      expect {UnitPriceCalculator.new price_point}.to raise_error(ParameterError)
     end
   end
 

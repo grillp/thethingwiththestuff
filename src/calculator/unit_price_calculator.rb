@@ -13,7 +13,7 @@ class UnitPriceCalculator
   private
 
   def vaildate_price_point_definition price_point
-    raise RuntimeError.new("Invalid Price Point definition") unless (price_point[:unit_price])
+    raise ParameterError.new("Invalid Price Point definition. Missing :unit_price key") unless (price_point[:unit_price])
   end
 
 

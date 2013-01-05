@@ -1,5 +1,7 @@
 class ThresholdPriceCalculator
 
+	PRICE_POINT_KEYS = [:unit_price, :threshold_price, :threshold_quantity]
+
 	def initialize price_point
 		validate_price_point price_point
 		@unit_price = price_point[:unit_price]
@@ -16,7 +18,7 @@ class ThresholdPriceCalculator
 	private
 
 	def validate_price_point pp
-      raise RuntimeError.new("Invalid Price Point definition") unless (pp[:unit_price] and pp[:threshold_price] and pp[:threshold_quantity])
+	  PRICE_POINT_KEYS.each { |expected_key| raise ParameterError.new("Invalid Price Point definition. Missing :#{expected_key}") unless pp.include? expected_key }
 	end
 
 end

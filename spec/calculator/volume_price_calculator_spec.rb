@@ -5,12 +5,13 @@ describe VolumePriceCalculator do
   subject {VolumePriceCalculator.new price_points}
   
   describe :new do
-    it "should raise and error if price point is missing a quantity" do
-      expect { VolumePriceCalculator.new [{price: 12.00}] }.to raise_error
-    end
-
-    it "should raise and error if price point is missing a price" do
-      expect { VolumePriceCalculator.new [{quantity: 123}] }.to raise_error
+    valid_keys = [:price, :quantity]
+    valid_keys.each do |key|   
+      it "should raise and error if price point is missing #{key}" do
+        price_point = {price: :price, quantity: :quantity}
+        price_point.delete key
+        expect { VolumePriceCalculator.new [price_point]}.to raise_error(ParameterError)
+      end
     end
   end
 

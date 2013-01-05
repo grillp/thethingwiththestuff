@@ -4,6 +4,8 @@ class VolumePriceCalculator
 
   include PricePointHelper
 
+  PRICE_POINT_KEYS = [:price, :quantity]
+
   def initialize price_points
     @price_points = {}
     initilize_price_points price_points
@@ -38,8 +40,8 @@ class VolumePriceCalculator
       end
     end
 
-    def vaildate_price_point_definition price_point
-      raise RuntimeError.new("Invalid Price Point definition") unless (price_point[:price] and price_point[:quantity])
+    def vaildate_price_point_definition pp
+      PRICE_POINT_KEYS.each { |expected_key| raise ParameterError.new("Invalid item price definition. Missing :#{expected_key}") unless pp.include? expected_key }
     end
 
   end

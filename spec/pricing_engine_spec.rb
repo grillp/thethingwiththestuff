@@ -1,88 +1,62 @@
 require 'spec_helper'
 
 describe PricingEngine do
-	subject { PricingEngine.new }
-	let (:cart) { stub(:cart) }
+  let (:price_calculator_factory) {mock(:price_calculator_factory)}
+  subject { PricingEngine.new price_calculator_factory }
+  let (:cart) { stub(:cart) }
+  let (:valid_item_prices) { [{name: :name1, type: :type1, prices: :prices1},
+                              {name: :name2, type: :type2, prices: :prices2}] }
 
-	describe :total_for_cart do
-		it 'should get the all items from cart' do
-			cart.should_receive(:items).and_return []
-			subject.total_for_cart cart
-		end
+  describe :total_for_cart do
+    it 'should get the all items from cart' do
+      cart.should_receive(:items).and_return []
+      subject.total_for_cart cart
+    end
+  end
 
-	end
+  describe :set_item_prices do
 
-	describe :add_price_point do
-		let (:item_price_calculator) {stub(:ItemPriceCalc).as_null_object}
-		it 'should create a new price point per uniquely named item' do
-			ItemPriceCalculator.should_receive(:new).twice().and_return(item_price_calculator)
-			subject.add_price_point(price_point_with(name: :fred))
-			subject.add_price_point(price_point_with(name: :mary))
-		end
+    it "should get a price calculator for each price" do
+      price_calculator_factory.should_receive(:create_calculator_for_type).once().with(:type1, :prices1)
+      price_calculator_factory.should_receive(:create_calculator_for_type).once().with(:type2, :prices2)
+      subject.set_item_prices valid_item_prices
+    end
 
-		it 'should not create a new price on duplicate named items' do
-			ItemPriceCalculator.should_receive(:new).once().and_return(item_price_calculator)
-			subject.add_price_point(price_point_with(name: :fred))
-			subject.add_price_point(price_point_with(name: :fred))
-		end
+    valid_keys = [:name, :type, :prices]
+    valid_keys.each do |key|
+    	it "should raise an error if the key :#{key} is missing from the item price" do
+				 item_prices = {name: :name1, type: :type1, prices: :prices1}
+				 item_prices.delete key
+				 expect { subject.set_item_prices [item_prices] }.to raise_error(ParameterError)			  	 	 
+    	end
+    end
+  end
 
-		it 'should add a quantity and price to the price calculator' do
-			ItemPriceCalculator.stub(:new).and_return(item_price_calculator)
+  context "with pricing set" do
+    let (:calc1) {mock(:calc1)}
+    let (:calc2) {mock(:calc2)}
+    before do
+      price_calculator_factory.stub(:create_calculator_for_type).with(:type1, :prices1).and_return(calc1)
+      price_calculator_factory.stub(:create_calculator_for_type).with(:type2, :prices2).and_return(calc2)
+      subject.set_item_prices valid_item_prices
+    end
 
-			item_price_calculator.should_receive(:add_price_point).with(12.21, 4, nil)
+    describe :price_for_item do     
+      it 'should call items price calculator' do
+        calc1.should_receive(:price_for_quantity).with(123)
+        subject.price_for_item(:name1, 123)
+      end
+    end
 
-			subject.add_price_point(price_point_with(name: :fred, price: 12.21, quantity: 4))
+    describe :has_price_for? do
+      it 'should return true if it has a price point for an item' do
+        subject.should have_price_for :name1
+      end
+      it 'should return false if it has a price point for an item' do
+        subject.should_not have_price_for :unknown
+      end
+    end
 
-		end
-
-		it 'should set type if the type is included in the price point' do
-			ItemPriceCalculator.stub(:new).and_return(item_price_calculator)
-
-			item_price_calculator.should_receive(:add_price_point).with(12.21, 4, true)
-
-			subject.add_price_point(price_point_with(name: :fred, price: 12.21, quantity: 4, threshold: true ))
-		end
-
-		let (:price_point) { price_point_with }
-
-		[:name, :quantity, :price].each do |attribute_to_remove|
-			it "should throw a RuntimeError if a price point does not contain a ':#{attribute_to_remove}' attributes" do
-				price_point.delete(attribute_to_remove);
-				lambda { subject.add_price_point price_point }.should raise_error(RuntimeError)
-			end
-		end
-
-	end
-
-	describe :price_for_item do
-		let (:item_price_calculator) {stub(:ItemPriceCalc).as_null_object}
-		before :each do
-			ItemPriceCalculator.stub(:new).and_return(item_price_calculator)
-			subject.add_price_point(price_point_with(name: :mary))
-		end
-
-		it 'should call items price caluculate with the items quantity' do
-			quantity = 123
-			item_price_calculator.should_receive(:price_for_quantity).with(123)
-			subject.price_for_item(:mary, 123)
-		end
-
-	end
-
-	describe :has_price_for? do
-		it 'should return true if it has a price point for an item' do
-			subject.add_price_point price_point_with(name: :exists)
-			subject.should have_price_for :exists
-		end
-		it 'should return false if it has a price point for an item' do
-			subject.add_price_point price_point_with(name: :exists)
-			subject.should_not have_price_for :does_not_exist
-		end
-	end
-
-	def price_point_with(params = {})
-		{name: 'something', price: 1, quantity: 1}.merge(params)
-	end
-
+  end
 
 end

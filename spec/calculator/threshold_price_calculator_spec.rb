@@ -8,7 +8,7 @@ describe ThresholdPriceCalculator do
     price_point_keys.each do |key|
       it "should raise and error if the price point definition is missing the :#{key} key" do
         price_point.delete key
-        expect {ThresholdPriceCalculator.new price_point}.to raise_error
+        expect {ThresholdPriceCalculator.new price_point}.to raise_error(ParameterError)
       end
     end
   end
