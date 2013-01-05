@@ -15,8 +15,8 @@ class ThresholdPriceCalculator
 
 	private
 
-	def validate_price_point price_point
-
+	def validate_price_point pp
+      raise RuntimeError.new("Invalid Price Point definition") unless (pp[:unit_price] and pp[:threshold_price] and pp[:threshold_quantity])
 	end
 
 end

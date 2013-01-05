@@ -1,12 +1,20 @@
 class UnitPriceCalculator
 
-	def initialize params={}
-		@unit_price = params[:price]
-	end
+  def initialize price_point
+  	vaildate_price_point_definition price_point
+    @unit_price = price_point[:unit_price]
+  end
 
-	def price_for_quantity quantity
-		return 0 if quantity <= 0
-		@unit_price * quantity
-	end
+  def price_for_quantity quantity
+    return 0 if quantity <= 0
+    @unit_price * quantity
+  end
+
+  private
+
+  def vaildate_price_point_definition price_point
+    raise RuntimeError.new("Invalid Price Point definition") unless (price_point[:unit_price])
+  end
+
 
 end
