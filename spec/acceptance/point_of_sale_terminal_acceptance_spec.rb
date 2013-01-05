@@ -33,7 +33,7 @@ describe "Point of Sale Terminal" do
 				item_names.each_char do |item_name|
 					subject.scan(item_name)
 				end
-				subject.total.should be_close(expected_total, 0.001)
+				subject.total.should be_within(0.001).of(expected_total)
 			end
 		end
 	end

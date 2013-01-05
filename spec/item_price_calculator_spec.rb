@@ -33,11 +33,11 @@ describe ItemPriceCalculator do
       end
 
       it "should take the threshold into account when when the quantity is at the threshold" do
-        subject.price_for_quantity(10).should be_close(9, 0.001)
+        subject.price_for_quantity(10).should be_within(0.001).of(9)
       end
 
       it "should take the threshold into account when when the quantity is above the threshold" do
-        subject.price_for_quantity(11).should be_close(9.90, 0.001)
+        subject.price_for_quantity(11).should be_within(0.001).of(9.90)
       end
       
     end
