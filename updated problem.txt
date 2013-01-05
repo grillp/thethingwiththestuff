@@ -1,0 +1,24 @@
+Feature: Multiple styles of volume discounts
+
+The system already handles items that are cheaper when sold in certain
+quantities but sell at their individual price when sold "loose."
+
+We also want to sell some items that should have volume discounts applied as
+long as the customer buys more than a threshold quantity. There's no "penalty"
+for buying odd quantities of these items.
+
+For example, the type of item we already handle works like this:
+A G costs 1.00 each, but they're available in cases of 10 for 9.00 a case, so:
+  | Quantity             | Total |
+  | G                    | 1.00  |
+  | GGG                  | 3.00  |
+  | GGGGGGGGGG (10 Gs)   | 9.00  |
+  | GGGGGGGGGGGG (12 Gs) | 11.00 |
+
+Whereas the new type of item we want to handle should work like this:
+An F costs 1.00 each, but only 0.90 each when buying 10 or more, so:
+  | Scanned items        | Total |
+  | F                    | 1.00  | <-- Same as G
+  | FFF                  | 3.00  | <-- Same as G
+  | FFFFFFFFFF (10 Fs)   | 9.00  | <-- Same as G
+  | FFFFFFFFFFFF (12 Fs) | 10.80 | <-- Different from G
