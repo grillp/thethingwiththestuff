@@ -1,4 +1,4 @@
-require_relative '../price_point_helper'
+require_relative '../utils/price_point_helper'
 
 class VolumePriceCalculator
 
