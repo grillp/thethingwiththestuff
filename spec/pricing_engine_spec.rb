@@ -29,10 +29,18 @@ describe PricingEngine do
 		it 'should add a quantity and price to the price calculator' do
 			ItemPriceCalculator.stub(:new).and_return(item_price_calculator)
 
-			item_price_calculator.should_receive(:add_price_point).with(12.21, 4)
+			item_price_calculator.should_receive(:add_price_point).with(12.21, 4, nil)
 
 			subject.add_price_point(price_point_with(name: :fred, price: 12.21, quantity: 4))
 
+		end
+
+		it 'should set type if the type is included in the price point' do
+			ItemPriceCalculator.stub(:new).and_return(item_price_calculator)
+
+			item_price_calculator.should_receive(:add_price_point).with(12.21, 4, true)
+
+			subject.add_price_point(price_point_with(name: :fred, price: 12.21, quantity: 4, threshold: true ))
 		end
 
 		let (:price_point) { price_point_with }
