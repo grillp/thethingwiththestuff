@@ -1,4 +1,4 @@
-class UnitItemPriceCalculator
+class UnitPriceCalculator
 
 	def initialize params={}
 		@unit_price = params[:price]

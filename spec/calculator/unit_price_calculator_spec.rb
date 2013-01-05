@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe UnitItemPriceCalculator do
+describe UnitPriceCalculator do
   let (:price) { 12.0 }
-  subject {UnitItemPriceCalculator.new(price: price)}
+  subject {UnitPriceCalculator.new(price: price)}
   describe :price_for_quantity do
     it "should return the quantity times the single unit price" do
       subject.price_for_quantity(10).should == 10 * price
