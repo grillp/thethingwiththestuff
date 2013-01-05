@@ -1,8 +1,9 @@
+require_relative "calculator/price_calculator_factory"
 class PricingEngine
 
 	ITEM_PRICE_KEYS=[:name, :type, :prices]
 
-  def initialize price_calculator_factory = nil
+  def initialize price_calculator_factory = PriceCalculatorFactory.new
     @price_calculators = {}
     @price_calculator_factory = price_calculator_factory
   end
@@ -11,7 +12,7 @@ class PricingEngine
 
     items_prices.each do |item_price|
     	validate_item_prices item_price
-      @price_calculators[item_price[:name]] = @price_calculator_factory.create_calculator_for_type item_price[:type], item_price[:prices]
+      @price_calculators[item_price[:name]] = @price_calculator_factory.create_for_type item_price[:type], item_price[:prices]
     end
   end
 

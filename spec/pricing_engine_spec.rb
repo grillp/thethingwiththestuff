@@ -17,8 +17,8 @@ describe PricingEngine do
   describe :set_item_prices do
 
     it "should get a price calculator for each price" do
-      price_calculator_factory.should_receive(:create_calculator_for_type).once().with(:type1, :prices1)
-      price_calculator_factory.should_receive(:create_calculator_for_type).once().with(:type2, :prices2)
+      price_calculator_factory.should_receive(:create_for_type).once().with(:type1, :prices1)
+      price_calculator_factory.should_receive(:create_for_type).once().with(:type2, :prices2)
       subject.set_item_prices valid_item_prices
     end
 
@@ -36,8 +36,8 @@ describe PricingEngine do
     let (:calc1) {mock(:calc1)}
     let (:calc2) {mock(:calc2)}
     before do
-      price_calculator_factory.stub(:create_calculator_for_type).with(:type1, :prices1).and_return(calc1)
-      price_calculator_factory.stub(:create_calculator_for_type).with(:type2, :prices2).and_return(calc2)
+      price_calculator_factory.stub(:create_for_type).with(:type1, :prices1).and_return(calc1)
+      price_calculator_factory.stub(:create_for_type).with(:type2, :prices2).and_return(calc2)
       subject.set_item_prices valid_item_prices
     end
 

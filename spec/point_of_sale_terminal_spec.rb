@@ -11,12 +11,9 @@ describe PointOfSaleTerminal do
   end
 
   describe 'set_pricing' do
-    it 'should add each price to the pricing engine' do
-      price_one = {name: 0};
-      price_two = {name: 1};
-      pricing = [price_one, price_two]
-      pricing_engine.should_receive(:add_price_point).once.with(price_one)
-      pricing_engine.should_receive(:add_price_point).once.with(price_two)
+    it 'should set the pricing_engines pricing' do
+      pricing = mock(:pricing)
+      pricing_engine.should_receive(:set_item_prices).with(pricing)
 
       subject.set_pricing(pricing)
     end

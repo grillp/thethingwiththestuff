@@ -8,7 +8,7 @@ class PointOfSaleTerminal
 	end
 
 	def set_pricing(pricing)
-		pricing.each { |price_point| @pricing_engine.add_price_point price_point }
+		@pricing_engine.set_item_prices pricing
 	end
 
 	def scan(item)
