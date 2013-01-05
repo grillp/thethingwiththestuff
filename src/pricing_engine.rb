@@ -1,5 +1,3 @@
-require_relative 'item_price_calculator'
-
 class PricingEngine
 
 	ITEM_PRICE_KEYS=[:name, :type, :prices]
